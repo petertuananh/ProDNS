@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="author" content="Kodinger">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>Đăng nhập vào ProDNS</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="/assets/css/my-login.css">
+	<link rel="stylesheet" href="/assets/vendor/toast/jquery.toast.min.css">
+	<link rel="stylesheet" href="/assets/vendor/toast/jquery.toast.css">
+</head>
+
+<body class="my-login-page">
+	<section class="h-100">
+		<div class="container h-100">
+			<div class="row justify-content-md-center h-100">
+				<div class="card-wrapper">
+					<div class="brand">
+						<img src="/assets/img/logo.jpg" alt="logo">
+					</div>
+					<div class="card fat">
+						<div class="card-body">
+							<h4 class="card-title">Login</h4>
+							<form method="dialog" onsubmit="login()" class="my-login-validation" novalidate="true">
+								<div class="form-group">
+									<label for="email">Tên người dùng</label>
+									<input id="username" type="text" class="form-control" name="email" value="" required autofocus>
+									<div class="invalid-feedback">
+										Tên người dùng không hợp lệ
+									</div>
+								</div>
+
+								<div class="form-group">
+									<!-- <label for="password">Password
+										<a href="forgot.html" class="float-right">
+											Forgot Password?
+										</a>
+									</label> -->
+									<input id="password" type="password" class="form-control" name="password" required data-eye>
+								    <div class="invalid-feedback">
+								    	Password is required
+							    	</div>
+								</div>
+
+								<!-- <div class="form-group">
+									<div class="custom-checkbox custom-control">
+										<input type="checkbox" name="remember" id="remember" class="custom-control-input">
+										<label for="remember" class="custom-control-label">Remember Me</label>
+									</div>
+								</div> -->
+
+								<div class="form-group m-0">
+									<button type="submit" class="btn btn-primary btn-block">
+										Đăng nhập
+									</button>
+								</div>
+								<!-- <div class="mt-4 text-center">
+									Don't have an account? <a href="register.html">Create One</a>
+								</div> -->
+							</form>
+						</div>
+					</div>
+					<div class="footer">
+						Copyright &copy; <%= new Date().getFullYear() %> &mdash; ProCloud
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	
+</body>
+</html>
+
+<script>
+	function login() {
+		const username = document.getElementById('username').value;
+		const password = document.getElementById('password').value;
+		$.ajax({
+        	url: '/api/auth/login',
+        	method: 'post',
+        	data: {
+				username,
+				password
+        	}
+    	}).then(res => {
+        	if (res.code !== 200) return showToast({type: 'error', msg: res.msg});
+        	return document.location.href = res.nextUrl || '/';
+    	});
+	}
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script src="/assets/js/my-login.js"></script>
+<script src="/assets/vendor/toast/jquery.toast.min.js"></script>
+<script src="/assets/vendor/toast/jquery.toast.js"></script>
+<script src="/assets/js/toast.js"></script>

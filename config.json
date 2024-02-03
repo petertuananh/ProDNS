@@ -1,0 +1,23 @@
+{
+  "server": {
+    "defaultPort": 8888,
+    "port": "8888"
+  },
+  "status": {
+    "isWizarded": true
+  },
+  "database": {
+    "mysql": {
+      "host": "",
+      "user": "",
+      "password": "",
+      "database": "",
+      "supportBigNumbers": true,
+      "bigNumberStrings": true,
+      "multipleStatements": true,
+      "charset": "utf8mb4_general_ci",
+      "connectionLimit": 1,
+      "port": "3306"
+    }
+  }
+}
