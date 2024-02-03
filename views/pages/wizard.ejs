@@ -121,7 +121,7 @@
             }).then(res => {
                 if (res.code !== 200) return showToast({type: 'error', msg: res.msg});
                 setTimeout(() => {
-                    return document.location.href = `${window.location.hostname}:${port}`;
+                    return document.location.href = `http://${window.location.hostname}:${port}`;
                 }, 2000)
             });
         }
