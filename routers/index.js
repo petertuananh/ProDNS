@@ -9,6 +9,7 @@ const fs = require('fs');
 router.use('/api', require('./api'));
 router.use('/auth', require('./auth'));
 router.get('/', functions.express.authentication.ensureAuthenticated, async (req, res) => {
+    if (!config.status.isWizarded) return res.redirect('/wizard');
     con.query(`SELECT * FROM user`, function (err, user) {
         con.query(`SELECT * FROM user_sessions`, function (err, user_sessions) {
             con.query(`SELECT * FROM custom_dns`, function (err, custom_dns) {
