@@ -4,7 +4,7 @@
     "port": "8888"
   },
   "status": {
-    "isWizarded": true
+    "isWizarded": false
   },
   "database": {
     "mysql": {
