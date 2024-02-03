@@ -6,6 +6,7 @@ const { createServer } = require('http');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const socketIo = require('socket.io');
+const ip = require('ip');
 
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -26,8 +27,9 @@ const io = new socketIo.Server(http, {
     allowEIO3: true,
 });
 
-http.listen(config.server.defaultPort, () => {
+http.listen(config.server.port || config.server.defaultPort, () => {
     console.log(`> WEB Server is working`)
+    console.log(`> Dashboard: http://${ip.address()}:${config.server.port || config.server.defaultPort}`)
 });
 
 // io.on('connection', (socket) => {

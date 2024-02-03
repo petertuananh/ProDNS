@@ -1,7 +1,6 @@
 {
   "server": {
-    "defaultPort": 8888,
-    "port": "8888"
+    "defaultPort": 8888
   },
   "status": {
     "isWizarded": false
