@@ -1,0 +1,36 @@
+<%- include("./partials/header.ejs")%>
+<main class="col-md-9 ml-sm-auto col-lg-10 px-md-4 py-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Monitor</li>
+        </ol>
+    </nav>
+    <!-- <h1 class="h2">Dashboard</h1> -->
+    <!-- <p>ProDNS</p> -->
+    <!-- <br> -->
+    <div class="row">
+        <div class="col-12 col-xl-6 mb-4 mb-lg-0">
+            <div class="card">
+                <h5 class="card-header">Requests</h5>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <ul id="requests" style="height: 600px; border: solid 1px #cecece;"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-xl-6 mb-4 mb-lg-0">
+            <div class="card">
+                <h5 class="card-header">Responses</h5>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <ul id="responses" style="height: 600px; border: solid 1px #cecece;"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+<%- include("./partials/footer.ejs")%>

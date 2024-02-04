@@ -1,0 +1,193 @@
+
+
+</div>
+
+</div>
+<footer class="pt-5 d-flex justify-content-between">
+    <!-- <span>Copyright © 2019-2020 <a href="https://themesberg.com">Themesberg</a></span> -->
+    <span></span>
+    <ul class="nav m-0">
+        <li class="nav-item">
+            <a class="nav-link text-secondary" aria-current="page" href="#">Privacy Policy</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-secondary" href="#">Terms and conditions</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-secondary" href="#">Contact</a>
+        </li>
+    </ul>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"
+    integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+<!-- Github buttons -->
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+<script>
+    new Chartist.Line('#traffic-chart', {
+        labels: ['January', 'Februrary', 'March', 'April', 'May', 'June'],
+        series: [
+            [23000, 25000, 19000, 34000, 56000, 64000]
+        ]
+    }, {
+        low: 0,
+        showArea: true
+    });
+</script>
+</body>
+
+</html>
+<script>
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+</script>
+<script src="/socket.io/socket.io.js"></script>
+
+<script>
+    const socket = io(`ws://${window.location.host}`, {
+        cors: {
+            origin: "*",
+        },
+        token: getCookie('_atk')
+    });
+    socket.emit('ready', {
+        token: getCookie('_atk')
+    })
+    socket.on('request', data => {
+        $('#requests').append($('<li>').text(`${data.request.address.address} : ${data.request.question[0].name}`));
+    });
+    socket.on('response', data => {
+        $('#responses').append($('<li>').text(`${data.response.answer[0].name} : ${data.response.answer[0].address}`));
+        console.log(data)
+    });
+    function logoutAll() {
+        $.ajax({
+            url: '/api/config/logoutAll',
+            method: 'post',
+        }).then(res => {
+            if (res.code !== 200) return showToast({type: 'error', msg: res.msg});
+            showToast({type: 'success', msg: res.msg});
+            return window.location.reload();
+        })
+    }
+    function restart() {
+        $.ajax({
+            url: '/api/config/power/restart',
+            method: 'post',
+        }).then(res => {
+            if (res.code !== 200) return showToast({type: 'error', msg: res.msg});
+            showToast({type: 'success', msg: res.msg});
+            return window.location.reload();
+        })
+    }
+    function addCustomDNS() {
+        const host = document.getElementById('ctdns-host').value;
+        const address = document.getElementById('ctdns-address').value;
+        $.ajax({
+            url: '/api/config/custom_dns/add',
+            method: 'post',
+            data: {
+                host,
+                address
+            }
+        }).then(res => {
+            if (res.code !== 200) return showToast({type: 'error', msg: res.msg});
+            showToast({type: 'success', msg: res.msg});
+            return window.location.reload();
+        })
+    }
+    function removeCustomDNS(id) {
+        $.ajax({
+            url: '/api/config/custom_dns/remove',
+            method: 'post',
+            data: {
+                id
+            }
+        }).then(res => {
+            if (res.code !== 200) return showToast({type: 'error', msg: res.msg});
+            showToast({type: 'success', msg: res.msg});
+            return window.location.reload();
+        })
+    }
+    function addBlockDNS() {
+        const host = document.getElementById('bdns-host').value;
+        $.ajax({
+            url: '/api/config/block_dns/add',
+            method: 'post',
+            data: {
+                host,
+            }
+        }).then(res => {
+            if (res.code !== 200) return showToast({type: 'error', msg: res.msg});
+            showToast({type: 'success', msg: res.msg});
+            return window.location.reload();
+        })
+    }
+    function removeBlockDNS(id) {
+        $.ajax({
+            url: '/api/config/block_dns/remove',
+            method: 'post',
+            data: {
+                id
+            }
+        }).then(res => {
+            if (res.code !== 200) return showToast({type: 'error', msg: res.msg});
+            showToast({type: 'success', msg: res.msg});
+            return window.location.reload();
+        })
+    }
+    function addBlockIp() {
+        const ip = document.getElementById('bip-host').value;
+        $.ajax({
+            url: '/api/config/block_ip/add',
+            method: 'post',
+            data: {
+                ip,
+            }
+        }).then(res => {
+            if (res.code !== 200) return showToast({type: 'error', msg: res.msg});
+            showToast({type: 'success', msg: res.msg});
+            return window.location.reload();
+        })
+    }
+    function removeBlockIP(id) {
+        $.ajax({
+            url: '/api/config/block_ip/remove',
+            method: 'post',
+            data: {
+                id
+            }
+        }).then(res => {
+            if (res.code !== 200) return showToast({type: 'error', msg: res.msg});
+            showToast({type: 'success', msg: res.msg});
+            return window.location.reload();
+        })
+    }
+</script>
+<script>
+    var exampleModal = document.getElementById('exampleModal')
+    exampleModal.addEventListener('show.bs.modal', function (event) {
+        // Button that triggered the modal
+        var button = event.relatedTarget
+        // Extract info from data-bs-* attributes
+        var recipient = button.getAttribute('data-bs-whatever')
+        // If necessary, you could initiate an AJAX request here
+        // and then do the updating in a callback.
+        //
+        // Update the modal's content.
+        var modalTitle = exampleModal.querySelector('.modal-title')
+        var modalBodyInput = exampleModal.querySelector('.modal-body input')
+
+        modalTitle.textContent = recipient
+    })
+</script>
+<script src="/assets/vendor/toast/jquery.toast.min.js"></script>
+<script src="/assets/vendor/toast/jquery.toast.js"></script>
+<script src="/assets/js/toast.js"></script>

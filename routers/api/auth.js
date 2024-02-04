@@ -13,7 +13,7 @@ router.post('/login', async (req, res) => {
         const hashedPasswd = crypto.createHmac("sha256", `${userFindByUsername[0].id}-${req.body.password}-#@*#&%#%^%#$#`).update(`${userFindByUsername[0].id}-${req.body.password}-#@*#&%#%^%#$#`).digest("hex");
         if (hashedPasswd !== userFindByUsername[0].passwd) return res.json({code: 403, msg: 'Mật khẩu chưa chính xác'});
         const accessToken = randomString.generate({ length: 15 });
-        con.query(`INSERT INTO user_sessions(id, userId, token, createAt, expireAt) VALUES (${randomString.generate({ charset: 'numeric', length: 10 })}, ${userFindByUsername[0].id}, '${accessToken}', ${Date.now()}, ${Date.now() + ms('24h')})`, e => {
+        con.query(`INSERT INTO user_sessions(id, userId, token, device, ip, agent, createAt, expireAt) VALUES (${randomString.generate({ charset: 'numeric', length: 10 })}, ${userFindByUsername[0].id}, '${accessToken}', '${req.useragent.platform}', '${req.ip}', '${req.useragent.source}', ${Date.now()}, ${Date.now() + ms('24h')})`, e => {
             if (e) return res.json({code: 500, msg: 'Lỗi đăng nhập'});
             return res.cookie('_atk', accessToken, {expires: false}).json({code: 200, msg: 'Đăng nhập thành công', nextUrl: req.cookies.next || '/'});
         });

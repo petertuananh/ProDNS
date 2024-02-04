@@ -1,0 +1,246 @@
+<%- include("./partials/header.ejs")%>
+
+    <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4 py-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">DNS</li>
+            </ol>
+        </nav>
+        <!-- <h1 class="h2">Dashboard</h1>
+        <p>ProDNS</p>
+        <br> -->
+        <!-- <div class="row my-4">
+                    <div class="col-12 col-md-6 col-lg-3 mb-4 mb-lg-0">
+                        <div class="card">
+                            <h5 class="card-header">Customers</h5>
+                            <div class="card-body">
+                                <h5 class="card-title">345k</h5>
+                                <p class="card-text">Feb 1 - Apr 1, United States</p>
+                                <p class="card-text text-success">18.2% increase since last month</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 mb-4 mb-lg-0 col-lg-3">
+                        <div class="card">
+                            <h5 class="card-header">Revenue</h5>
+                            <div class="card-body">
+                                <h5 class="card-title">$2.4k</h5>
+                                <p class="card-text">Feb 1 - Apr 1, United States</p>
+                                <p class="card-text text-success">4.6% increase since last month</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 mb-4 mb-lg-0 col-lg-3">
+                        <div class="card">
+                            <h5 class="card-header">Purchases</h5>
+                            <div class="card-body">
+                                <h5 class="card-title">43</h5>
+                                <p class="card-text">Feb 1 - Apr 1, United States</p>
+                                <p class="card-text text-danger">2.6% decrease since last month</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 mb-4 mb-lg-0 col-lg-3">
+                        <div class="card">
+                            <h5 class="card-header">Traffic</h5>
+                            <div class="card-body">
+                                <h5 class="card-title">64k</h5>
+                                <p class="card-text">Feb 1 - Apr 1, United States</p>
+                                <p class="card-text text-success">2.5% increase since last month</p>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+        <div class="row">
+            <div class="col-12 col-xl-6 mb-4 mb-lg-0">
+                <div class="card">
+                    <h5 class="card-header">Custom DNS</h5>
+                    <div class="card-body">
+                        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#exampleModal" data-bs-whatever="Thêm host mới">Add</button>
+
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Host</th>
+                                        <th scope="col">Address</th>
+                                        <th scope="col">Type</th>
+                                        <th scope="col">Delete</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% custom_dns.forEach(record=> { %>
+                                        <tr>
+                                            <th>
+                                                <%= record.host %>
+                                            </th>
+                                            <td>
+                                                <%= record.address %>
+                                            </td>
+                                            <td>
+                                                <%= record.type %>
+                                            </td>
+                                            <td><a href="#" onclick="removeCustomDNS('<%= record.id %>')"
+                                                    class="btn btn-sm btn-danger">Delete</a></td>
+                                        </tr>
+                                        <% }) %>
+                                </tbody>
+                            </table>
+                        </div>
+                        <a href="#" class="btn btn-block btn-light">View all</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-xl-6 mb-4 mb-lg-0">
+                <div class="card">
+                    <h5 class="card-header">Block DNS</h5>
+                    <div class="card-body">
+                        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#exampleModal2" data-bs-whatever="Thêm host mới">Add</button>
+
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Host</th>
+                                        <th scope="col">Delete</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% block_dns.forEach(record=> { %>
+                                        <tr>
+                                            <th>
+                                                <%= record.host %>
+                                            </th>
+                                            <td><a href="#" onclick="removeBlockDNS('<%= record.id %>')"
+                                                    class="btn btn-sm btn-danger">Delete</a></td>
+                                        </tr>
+                                        <% }) %>
+                                </tbody>
+                            </table>
+                        </div>
+                        <a href="#" class="btn btn-block btn-light">View all</a>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="col-12 col-xl-4">
+                        <div class="card">
+                            <h5 class="card-header">Traffic last 6 months</h5>
+                            <div class="card-body">
+                                <div id="traffic-chart"></div>
+                            </div>
+                        </div>
+                    </div> -->
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-12 col-xl-6 mb-4 mb-lg-0">
+                <div class="card">
+                    <h5 class="card-header">Block Device IP</h5>
+                    <div class="card-body">
+                        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#exampleModal3" data-bs-whatever="Thêm host mới">Add</button>
+
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">IP</th>
+                                        <th scope="col">Delete</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% block_ip.forEach(record=> { %>
+                                        <tr>
+                                            <th>
+                                                <%= record.ip %>
+                                            </th>
+                                            <td>
+                                                <a href="#" onclick="removeBlockIP('<%= record.id %>')"
+                                                    class="btn btn-sm btn-danger">Delete</a></td>
+                                            </tr>
+                                        <% }) %>
+                                </tbody>
+                            </table>
+                        </div>
+                        <a href="#" class="btn btn-block btn-light">View all</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <div class="modal fade" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="dialog" onsubmit="addBlockIp()">
+                        <div class="mb-3">
+                            <label for="recipient-name" class="col-form-label">IP:</label>
+                            <input type="text" class="form-control" id="bip-host">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" onclick="addBlockIp()" class="btn btn-primary">Thêm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="dialog" onsubmit="addBlockDNS()">
+                        <div class="mb-3">
+                            <label for="recipient-name" class="col-form-label">Host:</label>
+                            <input type="text" class="form-control" id="bdns-host">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" onclick="addBlockDNS()" class="btn btn-primary">Thêm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="dialog" onsubmit="addCustomDNS()">
+                        <div class="mb-3">
+                            <label for="recipient-name" class="col-form-label">Host:</label>
+                            <input type="text" class="form-control" id="ctdns-host">
+                        </div>
+                        <div class="mb-3">
+                            <label for="recipient-name" class="col-form-label">Addess:</label>
+                            <input type="text" class="form-control" id="ctdns-address">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" onclick="addCustomDNS()" class="btn btn-primary">Thêm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%- include("./partials/footer.ejs")%>

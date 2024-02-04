@@ -3,16 +3,13 @@ const ip = require('ip');
 const server = dns.createServer();
 const { lookup } = require('dns-lookup-cache');
 const { con } = require('../utils/databases/mysql');
-const c = require('./express');
-
-    
+const app = require('./express');
 server.on('request', function (request, response) {
     // console.log(request.question[0].name, request.address.address)
+    app.io.to('activeClient').emit('request', {
+        request,
+    })
     
-    // c.socket?.to('activeClient').emit('request', {
-    //     host: request.question[0].name,
-    //     requestIp: request.address.address
-    // })
     // prodns.elainateam.io
     con.query(`SELECT * FROM block_ip WHERE ip = '${request.address.address}'`, function (err, findBlockIpRecord) {
         if (findBlockIpRecord?.[0]) return;
@@ -32,6 +29,9 @@ server.on('request', function (request, response) {
                     }));
                 }
                 setTimeout(() => {
+                    app.io.to('activeClient').emit('response', {
+                        response,
+                    })
                     return response.send();
                 }, 800)
             } else {
@@ -41,6 +41,7 @@ server.on('request', function (request, response) {
                     lookup(request.question[0].name, {
                         family: 4
                     }, (error, address, family) => {
+                        if (error && !address) return;
                         response.answer.push(dns.A({
                             name: request.question[0].name,
                             address: address,
@@ -51,19 +52,24 @@ server.on('request', function (request, response) {
                     lookup(request.question[0].name, {
                         family: 6
                     }, (error, address, family) => {
-                        response.additional.push(dns.AAAA({
+                        if (error && !address) return;
+                        response.answer.push(dns.AAAA({
                             name: request.question[0].name,
                             address: address,
                             ttl: 300,
                         }));
                     });
                     setTimeout(() => {
+                        app.io.to('activeClient').emit('response', {
+                            response,
+                        })
                         return response.send();
                     }, 800)
                 })
             }
         })
     })
+    
 });
 
 

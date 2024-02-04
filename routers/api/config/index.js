@@ -4,7 +4,19 @@ const path = require('path');
 const randomString = require('randomstring');
 const fs = require('fs');
 const { con } = require('../../../utils/databases/mysql');
+const exec = require('node:child_process').exec;
+router.post('/logoutAll', async (req, res) => {
+    con.query(`DELETE FROM user_sessions`, function (err, logout) {
+        if (err) return res.json({code: 500, msg: 'Failed'});
+        return res.json({code: 200, msg: 'Successfully'});
+    })
+})
 
+router.post('/power/restart', async (req, res) => {
+    exec(`pm2 restart .`, function (error, stdout, stderr) {
+        return res.json({code: 200, msg: 'Requested successfully'});
+    });
+})
 router.post('/custom_dns/:type', async (req, res) => {
     if (req.params.type == 'add') {
         if (!req.body.host || !req.body.address) return res.json({code: 400, msg: 'Bad request'});

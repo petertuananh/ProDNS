@@ -19,27 +19,27 @@ router.post('/', async (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
     const passwordcf = req.body.passwordcf;
-    if (!port || !db_host || !db_port || !db_table || !db_username || !db_password || !username || !password) return res.json({code: 400, msg: 'Bad request'})
+    if (!port || !db_host || !db_port || !db_table || !db_username || !db_password || !username || !password) return res.json({ code: 400, msg: 'Bad request' })
     const connection = mysql.createConnection({
         host: db_host,
         port: db_port,
         user: db_username,
         password: db_password
     });
-    connection.connect(function(err) {
-        if (err) return res.json({code: 500, msg: 'Không thể kết nối đến mysql/marinadb'});
+    connection.connect(function (err) {
+        if (err) return res.json({ code: 500, msg: 'Không thể kết nối đến mysql/marinadb' });
         // connection.query(`DROP DATABASE ${db_table}`)
         connection.query(`CREATE DATABASE IF NOT EXISTS ${db_table}`, async e => {
             if (e) return res.json({ code: 500, msg: `Không thể tạo bảng ${db_table}` });
             connection.query(`CREATE TABLE IF NOT EXISTS ${db_table}.users (id text, username text, email text, passwd text, createAt text, flags text)`);
-            connection.query(`CREATE TABLE IF NOT EXISTS ${db_table}.user_sessions (id text, userId text, token text, createAt text, expireAt text)`);
+            connection.query(`CREATE TABLE IF NOT EXISTS ${db_table}.user_sessions (id text, userId text, token text, device text, ip text, agent text, createAt text, expireAt text)`);
             connection.query(`CREATE TABLE IF NOT EXISTS ${db_table}.custom_dns (id text, host text, address text, type text)`);
             connection.query(`CREATE TABLE IF NOT EXISTS ${db_table}.block_dns (id text, host text)`);
             connection.query(`CREATE TABLE IF NOT EXISTS ${db_table}.block_ip (id text, ip text)`);
             const userId = randomString.generate({ charset: 'numeric', length: 7 })
             const hashedPasswd = crypto.createHmac("sha256", `${userId}-${password}-#@*#&%#%^%#$#`).update(`${userId}-${password}-#@*#&%#%^%#$#`).digest("hex");
             connection.query(`INSERT INTO ${db_table}.users(id, username, email, passwd, createAt, flags) VALUES (${userId}, '${username}', '', '${hashedPasswd}', ${Date.now()}, '["admin"]')`);
-            
+
             // server config
             configFile.set("server.port", port);
 
@@ -55,11 +55,15 @@ router.post('/', async (req, res) => {
 
             // save changes
             configFile.save();
-            await res.json({code: 200, msg: 'Đã lưu thay đổi'});
-            return exec(`pm2 start . -n ProDNS`, function (error, stdout, stderr) {
-                return process.exit()
+            await res.json({ code: 200, msg: 'Đã lưu thay đổi' });
+            exec(`pm2 start . -n ProDNS`, function (error, stdout, stderr) {
+                exec(`pm2 save`, function (error, stdout, stderr) {
+                    exec(`pm2 startup`, function (error, stdout, stderr) {
+                        return process.exit()
+                    });
+                });
             });
-        })
+        });
     });
 });
 
