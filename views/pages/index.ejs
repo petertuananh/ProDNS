@@ -22,7 +22,7 @@
         </div>
         <div class="col-12 col-xl-8 mb-4 mb-lg-0">
             <div class="card">
-                <h5 class="card-header">Session</h5>
+                <h5 class="card-header">Session [<%= user_sessions.length %>]</h5>
                 <div class="card-body">
                     <div class="table-responsive">
                         <button type="button" onclick="logoutAll()" class="btn btn-danger">Logout All</button>
@@ -56,6 +56,41 @@
             </div>
         </div>
     </div>
-
+    <br>
+    <div class="row">
+        <div class="col-12 col-xl-12 mb-4 mb-lg-0">
+            <div class="card">
+                <h5 class="card-header">Devices [<%= devices.length %>]</h5>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">IP</th>
+                                    <th scope="col">MAC</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% devices.forEach(device => { %>
+                                    <tr>
+                                        <th>
+                                            <%= device.name %>
+                                        </th>
+                                        <th>
+                                            <%= device.ip %>
+                                        </th>
+                                        <td>
+                                            <%= device.mac %>
+                                        </td>
+                                    </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </main>
 <%- include("./partials/footer.ejs")%>

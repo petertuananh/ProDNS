@@ -56,6 +56,8 @@ router.post('/', async (req, res) => {
             // save changes
             configFile.save();
             await res.json({ code: 200, msg: 'Đã lưu thay đổi' });
+            exec(`apt install net-tools`, function (error, stdout, stderr) {
+            })
             exec(`pm2 start . -n ProDNS`, function (error, stdout, stderr) {
                 exec(`pm2 save`, function (error, stdout, stderr) {
                     exec(`pm2 startup`, function (error, stdout, stderr) {

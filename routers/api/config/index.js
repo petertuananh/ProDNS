@@ -13,8 +13,9 @@ router.post('/logoutAll', async (req, res) => {
 })
 
 router.post('/power/restart', async (req, res) => {
-    exec(`pm2 restart .`, function (error, stdout, stderr) {
-        return res.json({code: 200, msg: 'Requested successfully'});
+    exec(`pm2 restart .`, async function (error, stdout, stderr) {
+        await res.json({code: 200, msg: 'Requested successfully'});
+        return process.exit();
     });
 })
 router.post('/custom_dns/:type', async (req, res) => {

@@ -4,17 +4,23 @@ const path = require('path');
 const config = require('../config.json');
 const functions = require('../utils/functions');
 const { con } = require('../utils/databases/mysql');
+const find = require('local-devices');
+
 
 const fs = require('fs');
 router.use('/api', require('./api'));
 router.use('/auth', require('./auth'));
 router.get('/', functions.express.authentication.ensureAuthenticated, async (req, res) => {
-    con.query(`SELECT * FROM user_sessions`, function (err, user_sessions) {
-        return res.render('index', {
-            req,
-            user_sessions
+    find().then(devices => {
+        con.query(`SELECT * FROM user_sessions`, function (err, user_sessions) {
+            return res.render('index', {
+                req,
+                devices,
+                user_sessions
+            });
         });
-    });
+    })
+    
 });
 router.get('/monitor', functions.express.authentication.ensureAuthenticated, async (req, res) => {
     return res.render('monitor', {
